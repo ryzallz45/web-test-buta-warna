@@ -2,6 +2,16 @@ const canvas = document.getElementById('plate-canvas');
 const ctx = canvas.getContext('2d');
 
 const D = 400;
+const dpr = window.devicePixelRatio || 1;
+
+function setupCanvas() {
+    canvas.width = D * dpr;
+    canvas.height = D * dpr;
+    canvas.style.width = D + 'px';
+    canvas.style.height = D + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+setupCanvas();
 
 function hsl(h, s, l) {
     return `hsl(${h}, ${s}%, ${l}%)`;
