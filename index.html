@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tes Buta Warna Ishihara</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔵 Tes Buta Warna Ishihara</h1>
+            <p>Uji kemampuan penglihatan warna Anda</p>
+        </header>
+
+        <main id="app">
+            <!-- Start Screen -->
+            <div id="start-screen" class="screen active">
+                <div class="info-card">
+                    <h2>Petunjuk Tes</h2>
+                    <ul>
+                        <li>Anda akan melihat <strong>10 plat</strong> berisi lingkaran-lingkaran berwarna</li>
+                        <li>Di dalam lingkaran tersebut terdapat <strong>angka</strong> yang harus Anda tebak</li>
+                        <li>Jawab segera setelah Anda melihat angkanya, lalu tekan <strong>Jawab</strong></li>
+                        <li>Jika tidak melihat angka, tekan <strong>Tidak Ada</strong></li>
+                        <li>Gunakan pencahayaan yang cukup untuk hasil terbaik</li>
+                    </ul>
+                </div>
+                <button id="start-btn" class="btn-primary">Mulai Tes</button>
+            </div>
+
+            <!-- Test Screen -->
+            <div id="test-screen" class="screen">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="plate-counter" id="plate-counter">1 / 10</div>
+                <div class="canvas-wrapper">
+                    <canvas id="plate-canvas" width="400" height="400"></canvas>
+                </div>
+                <div class="answers">
+                    <input type="number" id="answer-input" placeholder="Masukkan angka..." min="0" max="999">
+                    <div class="btn-group">
+                        <button id="submit-btn" class="btn-primary">Jawab</button>
+                        <button id="skip-btn" class="btn-secondary">Tidak Ada</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Screen -->
+            <div id="result-screen" class="screen">
+                <h2>Hasil Tes</h2>
+                <div id="result-summary"></div>
+                <div id="result-details"></div>
+                <button id="restart-btn" class="btn-primary">Ulangi Tes</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>Catatan: Tes ini bersifat indikatif dan bukan pengganti diagnosis medis profesional.</p>
+        </footer>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>
