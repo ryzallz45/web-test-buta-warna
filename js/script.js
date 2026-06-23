@@ -68,6 +68,8 @@ const allPlates = [
     { number: 6, type: 'tritan', bgH: [190, 250], bgS: [35, 65], bgL: [30, 55], numH: [310, 350], numS: [50, 80], numL: [35, 55] },
 ];
 
+const TIMER_SECONDS = 10;
+
 let lightMode = 'bright';
 let testPlates = [];
 let currentIndex = 0;
@@ -75,6 +77,8 @@ let answers = [];
 let isProcessing = false;
 let currentRAF = null;
 let isRendered = false;
+let timerInterval = null;
+let timerSeconds = TIMER_SECONDS;
 
 const modeModifiers = {
     bright: { bgL: 0, numL: 0, bgS: 0, numS: 0 },
@@ -205,6 +209,36 @@ function pickTestPlates(count = 10) {
     return selected;
 }
 
+function clearTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+}
+
+function updateTimerDisplay() {
+    const el = document.getElementById('timer-value');
+    if (!el) return;
+    el.textContent = timerSeconds;
+    el.classList.remove('warning', 'danger');
+    if (timerSeconds <= 3) el.classList.add('danger');
+    else if (timerSeconds <= 5) el.classList.add('warning');
+}
+
+function startTimer() {
+    clearTimer();
+    timerSeconds = TIMER_SECONDS;
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timerSeconds--;
+        updateTimerDisplay();
+        if (timerSeconds <= 0) {
+            clearTimer();
+            skipAnswer(true);
+        }
+    }, 1000);
+}
+
 function showPlate(index) {
     if (index >= testPlates.length) {
         finishTest();
@@ -217,9 +251,11 @@ function showPlate(index) {
     document.getElementById('answer-input').value = '';
     document.getElementById('answer-input').focus();
     isProcessing = true;
+    clearTimer();
 
     generatePlate(plate, () => {
         isProcessing = false;
+        startTimer();
     });
 }
 
@@ -229,6 +265,7 @@ function submitAnswer() {
     const val = input.value.trim();
     if (val === '' || isNaN(Number(val))) return;
 
+    clearTimer();
     isProcessing = true;
     const plate = testPlates[currentIndex];
     const userAnswer = parseInt(val, 10);
@@ -239,8 +276,9 @@ function submitAnswer() {
     setTimeout(() => showPlate(currentIndex), 300);
 }
 
-function skipAnswer() {
-    if (isProcessing || !isRendered) return;
+function skipAnswer(fromTimer) {
+    if (!fromTimer && (isProcessing || !isRendered)) return;
+    clearTimer();
     isProcessing = true;
 
     const plate = testPlates[currentIndex];
@@ -251,6 +289,7 @@ function skipAnswer() {
 }
 
 function finishTest() {
+    clearTimer();
     document.getElementById('test-screen').classList.remove('active');
 
     const correctCount = answers.filter(a => a.correct).length;
