@@ -314,7 +314,80 @@ function finishTest() {
     });
     html += '</table>';
     document.getElementById('result-details').innerHTML = html;
+
+    saveHistory({ correctCount, total, verdict, details: answers.map(a => ({
+        type: a.plate.type, number: a.plate.number, userAnswer: a.userAnswer, correct: a.correct
+    })) });
+    renderHistory();
     document.getElementById('result-screen').classList.add('active');
+}
+
+function getHistory() {
+    try {
+        return JSON.parse(localStorage.getItem('ishihara_history')) || [];
+    } catch { return []; }
+}
+
+function saveHistory(result) {
+    const history = getHistory();
+    const entry = {
+        id: Date.now(),
+        date: new Date().toLocaleString('id-ID'),
+        score: `${result.correctCount}/${result.total}`,
+        correctCount: result.correctCount,
+        total: result.total,
+        verdict: result.verdict,
+        lightMode: lightMode,
+        details: result.details,
+    };
+    history.unshift(entry);
+    if (history.length > 20) history.length = 20;
+    localStorage.setItem('ishihara_history', JSON.stringify(history));
+}
+
+function clearHistory() {
+    localStorage.removeItem('ishihara_history');
+    renderHistory();
+}
+
+function renderHistory() {
+    const list = document.getElementById('history-list');
+    const history = getHistory();
+
+    if (history.length === 0) {
+        list.innerHTML = '<div class="empty-history">Belum ada riwayat tes.</div>';
+        return;
+    }
+
+    let html = '';
+    history.forEach((h, idx) => {
+        html += `
+        <div class="history-item" data-idx="${idx}">
+            <div class="history-item-header">
+                <span class="history-date">${h.date}</span>
+                <span class="history-score">${h.score}</span>
+                <span class="history-verdict">${h.verdict}</span>
+            </div>
+            <div class="history-details" id="hd-${idx}">
+                <table>
+                    <tr><th>#</th><th>Tipe</th><th>Angka</th><th>Jawaban</th><th>Status</th></tr>
+                    ${h.details.map((d, i) => {
+                        const s = d.correct ? '<span class="correct">&#10003;</span>' : '<span class="wrong">&#10007;</span>';
+                        const a = d.userAnswer !== null ? d.userAnswer : 'Tidak Ada';
+                        return `<tr><td>${i+1}</td><td>${typeLabel[d.type]||''}</td><td>${d.number}</td><td>${a}</td><td>${s}</td></tr>`;
+                    }).join('')}
+                </table>
+            </div>
+        </div>`;
+    });
+    list.innerHTML = html;
+
+    list.querySelectorAll('.history-item').forEach(el => {
+        el.addEventListener('click', () => {
+            const details = el.querySelector('.history-details');
+            details.classList.toggle('open');
+        });
+    });
 }
 
 // Event Handlers
@@ -348,3 +421,5 @@ document.getElementById('skip-btn').addEventListener('click', skipAnswer);
 document.getElementById('answer-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') submitAnswer();
 });
+
+document.getElementById('clear-history-btn').addEventListener('click', clearHistory);
