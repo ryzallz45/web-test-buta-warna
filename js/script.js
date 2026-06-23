@@ -472,3 +472,7 @@ document.getElementById('answer-input').addEventListener('keydown', e => {
 });
 
 document.getElementById('clear-history-btn').addEventListener('click', clearHistory);
+
+document.getElementById('export-pdf-btn').addEventListener('click', () => {
+    window.print();
+});
