@@ -68,12 +68,18 @@ const allPlates = [
     { number: 6, type: 'tritan', bgH: [190, 250], bgS: [35, 65], bgL: [30, 55], numH: [310, 350], numS: [50, 80], numL: [35, 55] },
 ];
 
+let lightMode = 'bright';
 let testPlates = [];
 let currentIndex = 0;
 let answers = [];
 let isProcessing = false;
 let currentRAF = null;
 let isRendered = false;
+
+const modeModifiers = {
+    bright: { bgL: 0, numL: 0, bgS: 0, numS: 0 },
+    dim: { bgL: 8, numL: -6, bgS: 15, numS: 10 },
+};
 
 function randomColor(hRange, sRange, lRange) {
     return hsl(
@@ -125,12 +131,22 @@ function generatePlate(plateConfig, done) {
     }
     isRendered = false;
 
+    const mod = modeModifiers[lightMode] || modeModifiers.bright;
+
+    function clampL(v) { return Math.max(0, Math.min(100, v)); }
+    function clampS(v) { return Math.max(0, Math.min(100, v)); }
+
+    const bgL = [clampL(plateConfig.bgL[0] + mod.bgL), clampL(plateConfig.bgL[1] + mod.bgL)];
+    const numL = [clampL(plateConfig.numL[0] + mod.numL), clampL(plateConfig.numL[1] + mod.numL)];
+    const bgS = [clampS(plateConfig.bgS[0] + mod.bgS), clampS(plateConfig.bgS[1] + mod.bgS)];
+    const numS = [clampS(plateConfig.numS[0] + mod.numS), clampS(plateConfig.numS[1] + mod.numS)];
+
     const r = rand(5, 9);
     const gap = r * 2.4;
     const pad = 20;
     const mask = createNumberMask(plateConfig.number, D);
-    const bgPalette = generatePalette(plateConfig.bgH, plateConfig.bgS, plateConfig.bgL, 80);
-    const numPalette = generatePalette(plateConfig.numH, plateConfig.numS, plateConfig.numL, 40);
+    const bgPalette = generatePalette(plateConfig.bgH, bgS, bgL, 80);
+    const numPalette = generatePalette(plateConfig.numH, numS, numL, 40);
 
     ctx.clearRect(0, 0, D, D);
     ctx.fillStyle = '#f5f5f5';
@@ -317,6 +333,14 @@ document.getElementById('restart-btn').addEventListener('click', () => {
     testPlates = [];
     currentIndex = 0;
     answers = [];
+});
+
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        lightMode = btn.dataset.mode;
+    });
 });
 
 document.getElementById('submit-btn').addEventListener('click', submitAnswer);
