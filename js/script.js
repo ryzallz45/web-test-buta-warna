@@ -1,7 +1,7 @@
 const canvas = document.getElementById('plate-canvas');
 const ctx = canvas.getContext('2d');
 
-const D = 400;
+const D = 420;
 const dpr = window.devicePixelRatio || 1;
 
 function setupCanvas() {
@@ -43,21 +43,21 @@ const typeLabel = {
 
 const allPlates = [
     // --- Kontrol (4) ---
-    { number: 12, type: 'control', bgH: [80, 150], bgS: [10, 25], bgL: [35, 60], numH: [0, 25], numS: [75, 100], numL: [40, 55] },
-    { number: 10, type: 'control', bgH: [20, 50], bgS: [10, 25], bgL: [30, 55], numH: [200, 230], numS: [85, 100], numL: [40, 60] },
-    { number: 7, type: 'control', bgH: [200, 260], bgS: [10, 20], bgL: [40, 65], numH: [120, 150], numS: [70, 100], numL: [35, 55] },
-    { number: 5, type: 'control', bgH: [30, 60], bgS: [5, 18], bgL: [40, 65], numH: [280, 310], numS: [70, 100], numL: [40, 55] },
+    { number: 12, type: 'control', bgH: [80, 150], bgS: [8, 20], bgL: [30, 55], numH: [0, 25], numS: [80, 100], numL: [45, 65] },
+    { number: 10, type: 'control', bgH: [20, 50], bgS: [8, 20], bgL: [28, 50], numH: [200, 230], numS: [85, 100], numL: [45, 65] },
+    { number: 7, type: 'control', bgH: [200, 260], bgS: [8, 18], bgL: [38, 62], numH: [120, 150], numS: [75, 100], numL: [32, 50] },
+    { number: 5, type: 'control', bgH: [30, 60], bgS: [5, 15], bgL: [38, 62], numH: [280, 310], numS: [75, 100], numL: [32, 50] },
 
     // --- Merah-Hijau (9) ---
-    { number: 6, type: 'red-green', bgH: [60, 140], bgS: [40, 75], bgL: [30, 55], numH: [0, 30], numS: [65, 100], numL: [35, 55] },
-    { number: 8, type: 'red-green', bgH: [350, 30], bgS: [40, 75], bgL: [30, 50], numH: [70, 140], numS: [55, 90], numL: [35, 55] },
-    { number: 5, type: 'red-green', bgH: [40, 80], bgS: [30, 65], bgL: [25, 50], numH: [330, 15], numS: [65, 100], numL: [40, 60] },
-    { number: 3, type: 'red-green', bgH: [100, 160], bgS: [40, 70], bgL: [30, 55], numH: [5, 40], numS: [70, 100], numL: [35, 55] },
-    { number: 2, type: 'red-green', bgH: [80, 150], bgS: [40, 65], bgL: [45, 65], numH: [340, 20], numS: [50, 80], numL: [40, 60] },
-    { number: 9, type: 'red-green', bgH: [0, 30], bgS: [40, 70], bgL: [30, 50], numH: [80, 150], numS: [50, 85], numL: [35, 55] },
-    { number: 4, type: 'red-green', bgH: [50, 90], bgS: [30, 60], bgL: [25, 45], numH: [340, 20], numS: [60, 95], numL: [35, 55] },
-    { number: 1, type: 'red-green', bgH: [90, 160], bgS: [35, 70], bgL: [30, 55], numH: [355, 25], numS: [65, 100], numL: [35, 55] },
-    { number: 11, type: 'red-green', bgH: [60, 110], bgS: [25, 55], bgL: [25, 50], numH: [0, 30], numS: [50, 85], numL: [30, 50] },
+    { number: 6, type: 'red-green', bgH: [60, 140], bgS: [40, 75], bgL: [28, 52], numH: [0, 30], numS: [65, 100], numL: [38, 58] },
+    { number: 8, type: 'red-green', bgH: [350, 30], bgS: [40, 75], bgL: [28, 48], numH: [70, 140], numS: [55, 90], numL: [38, 58] },
+    { number: 5, type: 'red-green', bgH: [40, 80], bgS: [30, 65], bgL: [22, 45], numH: [330, 15], numS: [65, 100], numL: [40, 62] },
+    { number: 3, type: 'red-green', bgH: [100, 160], bgS: [40, 70], bgL: [28, 52], numH: [5, 40], numS: [70, 100], numL: [38, 58] },
+    { number: 2, type: 'red-green', bgH: [80, 150], bgS: [40, 65], bgL: [42, 62], numH: [340, 20], numS: [50, 80], numL: [44, 64] },
+    { number: 9, type: 'red-green', bgH: [0, 30], bgS: [40, 70], bgL: [28, 48], numH: [80, 150], numS: [50, 85], numL: [38, 58] },
+    { number: 4, type: 'red-green', bgH: [50, 90], bgS: [30, 60], bgL: [22, 42], numH: [340, 20], numS: [60, 95], numL: [38, 58] },
+    { number: 1, type: 'red-green', bgH: [90, 160], bgS: [35, 70], bgL: [28, 52], numH: [355, 25], numS: [65, 100], numL: [38, 58] },
+    { number: 11, type: 'red-green', bgH: [60, 110], bgS: [25, 55], bgL: [22, 45], numH: [0, 30], numS: [50, 85], numL: [35, 55] },
 
     // --- Protan-spesifik (4) --- bg dan num punya luminansi mirip, saturasi rendah
     { number: 7, type: 'protan', bgH: [60, 120], bgS: [18, 40], bgL: [25, 40], numH: [355, 25], numS: [18, 40], numL: [25, 40] },
@@ -92,7 +92,7 @@ let timerSeconds = TIMER_SECONDS;
 
 const modeModifiers = {
     bright: { bgL: 0, numL: 0, bgS: 0, numS: 0 },
-    dim: { bgL: 8, numL: -6, bgS: 15, numS: 10 },
+    dim: { bgL: 10, numL: -8, bgS: 20, numS: 15 },
 };
 
 function randomColor(hRange, sRange, lRange) {
@@ -122,20 +122,28 @@ function createNumberMask(number, size) {
 
     oc.fillStyle = 'black';
     const text = number.toString();
-    const fontSize = text.length > 1 ? size * 0.45 : size * 0.55;
-    oc.font = `bold ${fontSize}px "Arial", "Helvetica", sans-serif`;
+    const fontSize = text.length > 1 ? size * 0.52 : size * 0.62;
+    oc.font = `bold ${fontSize}px "Arial Black", "Arial", "Helvetica", sans-serif`;
     oc.textAlign = 'center';
     oc.textBaseline = 'middle';
-    oc.fillText(text, size / 2, size / 2 + 2);
+    oc.fillText(text, size / 2, size / 2);
 
     return oc.getImageData(0, 0, size, size);
 }
 
 function isInMask(mask, x, y) {
-    const px = Math.round(x);
-    const py = Math.round(y);
-    if (px < 0 || px >= mask.width || py < 0 || py >= mask.height) return false;
-    return mask.data[(py * mask.width + px) * 4] < 128;
+    const px = x;
+    const py = y;
+    if (px < 1 || px >= mask.width - 1 || py < 1 || py >= mask.height - 1) return false;
+    let count = 0;
+    const stride = mask.width * 4;
+    const base = (Math.round(py) * mask.width + Math.round(px)) * 4;
+    if (mask.data[base] < 128) count++;
+    if (mask.data[base + 4] < 128) count++;
+    if (mask.data[base - 4] < 128) count++;
+    if (mask.data[base + stride] < 128) count++;
+    if (mask.data[base - stride] < 128) count++;
+    return count >= 3;
 }
 
 function generatePlate(plateConfig, done) {
@@ -155,12 +163,12 @@ function generatePlate(plateConfig, done) {
     const bgS = [clampS(plateConfig.bgS[0] + mod.bgS), clampS(plateConfig.bgS[1] + mod.bgS)];
     const numS = [clampS(plateConfig.numS[0] + mod.numS), clampS(plateConfig.numS[1] + mod.numS)];
 
-    const r = rand(5, 9);
-    const gap = r * 2.4;
-    const pad = 20;
+    const r = rand(3.5, 6.5);
+    const gap = r * 2.0;
+    const pad = 24;
     const mask = createNumberMask(plateConfig.number, D);
-    const bgPalette = generatePalette(plateConfig.bgH, bgS, bgL, 80);
-    const numPalette = generatePalette(plateConfig.numH, numS, numL, 40);
+    const bgPalette = generatePalette(plateConfig.bgH, bgS, bgL, 100);
+    const numPalette = generatePalette(plateConfig.numH, numS, numL, 50);
 
     ctx.clearRect(0, 0, D, D);
     ctx.fillStyle = '#f5f5f5';
